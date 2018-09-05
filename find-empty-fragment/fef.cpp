@@ -7,13 +7,13 @@
 
 class EmptyFragmentInfo{
 public:
-    EmptyFragmentInfo(size_t localCounter, double maxAbsValue, size_t position)
+    EmptyFragmentInfo(size_t localCounter, double maxAbsSampleValue, size_t position)
         : localCounter_(localCounter)
-        , maxAbsValue_ (maxAbsValue)
+        , maxAbsSampleValue_ (maxAbsSampleValue)
         , position_(position)
     { }
     size_t localCounter_ = 0;
-    double maxAbsValue_ = 0.0;
+    double maxAbsSampleValue_ = 0.0;
     size_t position_;
 };
 
@@ -35,7 +35,7 @@ int main(int argc, char *argv[]){
         return -1;
     }
 
-    auto s_threshold = 0.0001;
+    auto s_threshold = 0.00001;
     auto s_samples = 100;
     {
         std::cout << "normalized sample threshold: " << s_threshold << std::endl;
@@ -90,12 +90,19 @@ int main(int argc, char *argv[]){
         }
 
 
-        for (auto &fragment : fragmentList){
-            printf("found empty fragment @0x%zx \t length = %zd bytes\n" ,fragment.position_ , fragment.localCounter_);
-        }
 
         if (fragmentList.size()==0){
             std::cout << "no empty fragment found" << std::endl;
+        }
+        else {
+            printf("found %zu empty fragment%s(print format: offset+length {maxAbsSampleValue}}):\n", fragmentList.size(), fragmentList.size()>1?"s":"");
+            for (auto &fragment : fragmentList){
+                printf("\t@0x%zx \t +0x%zx(%zd bytes) \t {%f}\n",
+                       fragment.position_ ,
+                       fragment.localCounter_,
+                       fragment.localCounter_,
+                       fragment.maxAbsSampleValue_);
+            }
         }
 
         ifs.close();
