@@ -1,4 +1,5 @@
 #include <iostream>
+#include <stdio.h>
 #include <fstream>
 #include <vector>
 #include <cmath>
@@ -90,7 +91,7 @@ int main(int argc, char *argv[]){
 
 
         for (auto &fragment : fragmentList){
-            std::cout << "found empty fragment: "<<fragment.localCounter_<<" (offset: " << fragment.position_ << "bytes)" << std::endl;
+            printf("found empty fragment @0x%zx \t length = %zd bytes\n" ,fragment.position_ , fragment.localCounter_);
         }
 
         if (fragmentList.size()==0){
